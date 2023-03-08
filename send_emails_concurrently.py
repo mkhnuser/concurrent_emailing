@@ -30,23 +30,23 @@ EMAIL_ADDRESS = os.environ['EMAIL_ADDRESS']
 EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
 
 
-class _Email(NamedTuple):
+class Email(NamedTuple):
     recipient: str
     subject: str
     content: str
     sender: str = EMAIL_ADDRESS
 
 
-def _get_email_data() -> Generator[_Email, None, None]:
+def get_email_data() -> Generator[Email, None, None]:
     with open(args.input_file, 'rt', newline='') as file:
         csv_reader = csv.reader(file)
         next(csv_reader)  # Recipient, subject, content.
 
         for row in csv_reader:
-            yield _Email(*row)
+            yield Email(*row)
 
 
-def _compose_message(datum: _Email) -> EmailMessage:
+def compose_message(datum: Email) -> EmailMessage:
     message = EmailMessage()
     message['From'] = datum.sender
     message['To'] = datum.recipient
@@ -65,7 +65,7 @@ def send_emails_concurrently() -> Iterator:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             return executor.map(
                 smtp_server.send_message,
-                (_compose_message(datum) for datum in _get_email_data())
+                (compose_message(datum) for datum in get_email_data())
             )
 
 
