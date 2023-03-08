@@ -1,8 +1,8 @@
-# Concurrent email sending
+# Concurrent emailing
 
 ## Overview
 
-Package that allows concurrent email sending. Each email is sent within a separate thread.
+Simple package that allows concurrent email sending. Each email is sent within a separate thread.
 
 ## Example of usage
 
@@ -12,7 +12,7 @@ export SMTP_SERVER_HOST="smtp.gmail.com"
 export SMTP_SERVER_PORT="465"
 export EMAIL_ADDRESS="address@email.com"
 export EMAIL_PASSWORD="password"
-python -m concurrent_email_sending
+python -m concurrent_emailing
 </pre>
 ```SMTP_SERVER_HOST``` and ```SMTP_SERVER_PORT``` are used to identify SMTP server;
 <br>```EMAIL_ADDRESS``` and ```EMAIL_PASSWORD``` are credentials for an email from which *emails* will be sent. ```data.csv``` file is used to get email data by default.
