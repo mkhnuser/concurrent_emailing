@@ -11,23 +11,23 @@ from typing import Iterator, Generator, NamedTuple
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    '--input-file',
-    dest='input_file',
-    type=argparse.FileType('r'),
-    default=pathlib.Path(__file__).parent / pathlib.Path('data.csv'),
+    "--input-file",
+    dest="input_file",
+    type=argparse.FileType("r"),
+    default=pathlib.Path(__file__).parent / pathlib.Path("data.csv"),
     help=(
-        'Path to a .csv file that contains mailing information.'
-        ' The following headers are used: recipient, subject, content.'
-        ' data.csv file is used by default.'
+        "Path to a .csv file that contains mailing information."
+        " The following headers are used: recipient, subject, content."
+        " data.csv file is used by default."
     )
 )
 args = parser.parse_args()
 
 
-SMTP_SERVER_HOST = os.environ['SMTP_SERVER_HOST']
-SMTP_SERVER_PORT = int(os.environ['SMTP_SERVER_PORT'])
-EMAIL_ADDRESS = os.environ['EMAIL_ADDRESS']
-EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
+SMTP_SERVER_HOST = os.environ["SMTP_SERVER_HOST"]
+SMTP_SERVER_PORT = int(os.environ["SMTP_SERVER_PORT"])
+EMAIL_ADDRESS = os.environ["EMAIL_ADDRESS"]
+EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
 
 
 class Email(NamedTuple):
@@ -38,7 +38,7 @@ class Email(NamedTuple):
 
 
 def get_email_data() -> Generator[Email, None, None]:
-    with open(args.input_file, 'rt', newline='') as file:
+    with open(args.input_file, "rt", newline="") as file:
         csv_reader = csv.reader(file)
         next(csv_reader)  # Recipient, subject, content.
 
@@ -48,9 +48,9 @@ def get_email_data() -> Generator[Email, None, None]:
 
 def compose_message(datum: Email) -> EmailMessage:
     message = EmailMessage()
-    message['From'] = datum.sender
-    message['To'] = datum.recipient
-    message['Subject'] = datum.subject
+    message["From"] = datum.sender
+    message["To"] = datum.recipient
+    message["Subject"] = datum.subject
     message.set_content(datum.content)
     return message
 
@@ -69,5 +69,5 @@ def send_emails_concurrently() -> Iterator:
             )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     send_emails_concurrently()
